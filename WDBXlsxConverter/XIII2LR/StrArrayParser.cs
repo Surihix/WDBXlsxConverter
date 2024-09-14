@@ -6,23 +6,23 @@ namespace WDBXlsxConverter.XIII2LR
 {
     internal class StrArrayParser
     {
-        public static void SubSections(BinaryReader br, WDBVariablesXIII2LR wdbVars)
+        public static void SubSections(BinaryReader wdbReader, WDBVariablesXIII2LR wdbVars)
         {
-            var readPos = br.BaseStream.Position;
+            var readPos = wdbReader.BaseStream.Position;
 
             // !!strArray
-            _ = br.BaseStream.Position = readPos;
-            WDBMethods.CheckSectionName(br, wdbVars.StrArraySectionName);
-            wdbVars.StrArrayData = WDBMethods.SaveSectionData(br, false);
+            _ = wdbReader.BaseStream.Position = readPos;
+            WDBMethods.CheckSectionName(wdbReader, wdbVars.StrArraySectionName);
+            wdbVars.StrArrayData = WDBMethods.SaveSectionData(wdbReader, false);
             wdbVars.RecordCount--;
 
             // !!strArrayInfo
-            _ = br.BaseStream.Position = readPos + 32;
-            WDBMethods.CheckSectionName(br, wdbVars.StrArrayInfoSectionName);
+            _ = wdbReader.BaseStream.Position = readPos + 32;
+            WDBMethods.CheckSectionName(wdbReader, wdbVars.StrArrayInfoSectionName);
 
-            _ = br.BaseStream.Position = br.ReadBytesUInt32(true) + 2;
-            wdbVars.OffsetsPerValue = br.ReadByte();
-            wdbVars.BitsPerOffset = br.ReadByte();
+            _ = wdbReader.BaseStream.Position = wdbReader.ReadBytesUInt32(true) + 2;
+            wdbVars.OffsetsPerValue = wdbReader.ReadByte();
+            wdbVars.BitsPerOffset = wdbReader.ReadByte();
             wdbVars.RecordCount--;
 
             Console.WriteLine("[StrArray]");
@@ -32,9 +32,9 @@ namespace WDBXlsxConverter.XIII2LR
 
 
             // !!strArrayList
-            _ = br.BaseStream.Position = readPos + 64;
-            WDBMethods.CheckSectionName(br, wdbVars.StrArrayListSectionName);
-            wdbVars.StrArrayListData = WDBMethods.SaveSectionData(br, false);
+            _ = wdbReader.BaseStream.Position = readPos + 64;
+            WDBMethods.CheckSectionName(wdbReader, wdbVars.StrArrayListSectionName);
+            wdbVars.StrArrayListData = WDBMethods.SaveSectionData(wdbReader, false);
             wdbVars.RecordCount--;
         }
 

@@ -130,6 +130,10 @@ namespace WDBXlsxConverter
                                 XIII2LR.RecordsParser.ProcessRecords(wdbReader, wdbVarsXIII2LR, workbook);
                             }
                             break;
+
+                        default:
+                            WDBMethods.ErrorExit("Specified gamecode is invalid");
+                            break;
                     }
                 }
             }
