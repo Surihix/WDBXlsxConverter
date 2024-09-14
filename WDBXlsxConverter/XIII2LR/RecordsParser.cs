@@ -7,10 +7,10 @@ namespace WDBXlsxConverter.XIII2LR
 {
     internal class RecordsParser
     {
-        public static void ProcessRecords(BinaryReader br, WDBVariablesXIII2LR wdbVars, XLWorkbook workbook)
+        public static void ProcessRecords(BinaryReader wdbReader, WDBVariablesXIII2LR wdbVars, XLWorkbook workbook)
         {
             // Process each record's data
-            var sectionPos = br.BaseStream.Position;
+            var sectionPos = wdbReader.BaseStream.Position;
             string currentRecordName;
             byte[] currentRecordData;
             var strtypelistIndex = 0;
@@ -36,15 +36,15 @@ namespace WDBXlsxConverter.XIII2LR
 
             for (int r = 0; r < wdbVars.RecordCount; r++)
             {
-                _ = br.BaseStream.Position = sectionPos;
-                currentRecordName = br.ReadBytesString(16, false);
+                _ = wdbReader.BaseStream.Position = sectionPos;
+                currentRecordName = wdbReader.ReadBytesString(16, false);
 
                 cellY = 1;
                 Console.WriteLine($"Record: {currentRecordName}");
                 WDBMethods.WriteToSheet(mainSheet, cellX, cellY, currentRecordName, 2, false);
                 cellY++;
 
-                currentRecordData = WDBMethods.SaveSectionData(br, false);
+                currentRecordData = WDBMethods.SaveSectionData(wdbReader, false);
 
                 for (int f = 0; f < wdbVars.FieldCount; f++)
                 {
