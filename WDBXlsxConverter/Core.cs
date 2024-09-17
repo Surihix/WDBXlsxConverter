@@ -141,7 +141,6 @@ namespace WDBXlsxConverter
                 Console.WriteLine("");
                 Console.WriteLine("");
                 Console.WriteLine("Finished converting records to xlsx file");
-                Console.ReadLine();
 
                 Environment.Exit(0);
             }
