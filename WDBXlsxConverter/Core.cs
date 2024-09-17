@@ -13,48 +13,48 @@ namespace WDBXlsxConverter
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.WriteLine("");
 
-            if (args.Length == 0)
-            {
-                WDBMethods.ErrorExit("Enough arguments not specified. please launch the program with -? switch for more info.");
-            }
-
-            if (args[0] == "-?")
-            {
-                Console.WriteLine("Game Codes:");
-                Console.WriteLine("-ff131 = Sets conversion compatibility to FFXIII");
-                Console.WriteLine("-ff132 = Sets conversion compatibility to FFXIII-2 and LR");
-
-                Console.WriteLine("");
-                Console.WriteLine("Tool actions:");
-                Console.WriteLine("WDBXlsxConverter -? = Display this help page");
-                Console.WriteLine("WDBXlsxConverter -gamecode \"wdbFilePath\" = Converts the wdb data into a new xlsx file");
-                Console.WriteLine("WDBXlsxConverter -gamecode \"wdbFilePath\" -i = Converts the wdb data into a new xlsx file without the fieldnames (only when gamecode is -ff131)");
-
-                Console.WriteLine("");
-                Console.WriteLine("Examples:");
-                Console.WriteLine("WDBXlsxConverter.exe -?");
-                Console.WriteLine("WDBXlsxConverter.exe -ff131 \"auto_clip.wdb\"");
-                Console.WriteLine("WDBXlsxConverter.exe -ff131 \"auto_clip.wdb\" -i");
-                Console.WriteLine("WDBXlsxConverter.exe -ff132 \"auto_clip.wdb\"");
-
-                Console.ReadLine();
-                Environment.Exit(0);
-            }
-
-            if (args.Length < 2)
-            {
-                WDBMethods.ErrorExit("Enough arguments not specified for this process");
-            }
-
-
-            var gameCode = args[0];
-            var inFile = args[1];
-
             try
             {
+                if (args.Length == 0)
+                {
+                    SharedMethods.ErrorExit("Enough arguments not specified. please launch the program with -? switch for more info.");
+                }
+
+                if (args[0] == "-?")
+                {
+                    Console.WriteLine("Game Codes:");
+                    Console.WriteLine("-ff131 = Sets conversion compatibility to FFXIII");
+                    Console.WriteLine("-ff132 = Sets conversion compatibility to FFXIII-2 and LR");
+
+                    Console.WriteLine("");
+                    Console.WriteLine("Tool actions:");
+                    Console.WriteLine("WDBXlsxConverter -? = Display this help page");
+                    Console.WriteLine("WDBXlsxConverter -gamecode \"wdbFilePath\" = Converts the wdb data into a new xlsx file");
+                    Console.WriteLine("WDBXlsxConverter -gamecode \"wdbFilePath\" -i = Converts the wdb data into a new xlsx file without the fieldnames (only when gamecode is -ff131)");
+
+                    Console.WriteLine("");
+                    Console.WriteLine("Examples:");
+                    Console.WriteLine("WDBXlsxConverter.exe -?");
+                    Console.WriteLine("WDBXlsxConverter.exe -ff131 \"auto_clip.wdb\"");
+                    Console.WriteLine("WDBXlsxConverter.exe -ff131 \"auto_clip.wdb\" -i");
+                    Console.WriteLine("WDBXlsxConverter.exe -ff132 \"auto_clip.wdb\"");
+
+                    Console.ReadLine();
+                    Environment.Exit(0);
+                }
+
+                if (args.Length < 2)
+                {
+                    SharedMethods.ErrorExit("Enough arguments not specified for this process");
+                }
+
+
+                var gameCode = args[0];
+                var inFile = args[1];
+
                 if (!File.Exists(inFile))
                 {
-                    WDBMethods.ErrorExit("Specified file in the argument is missing");
+                    SharedMethods.ErrorExit("Specified file in the argument is missing");
                 }
 
                 using (var wdbReader = new BinaryReader(File.Open(inFile, FileMode.Open, FileAccess.Read)))
@@ -62,7 +62,7 @@ namespace WDBXlsxConverter
                     _ = wdbReader.BaseStream.Position = 0;
                     if (wdbReader.ReadBytesString(3, false) != "WPD")
                     {
-                        WDBMethods.ErrorExit("Not a valid WPD file");
+                        SharedMethods.ErrorExit("Not a valid WPD file");
                     }
 
                     _ = wdbReader.BaseStream.Position += 1;
@@ -78,7 +78,7 @@ namespace WDBXlsxConverter
 
                             if (wdbVarsXIII.RecordCount == 0)
                             {
-                                WDBMethods.ErrorExit("No records/sections are present in this file");
+                                SharedMethods.ErrorExit("No records/sections are present in this file");
                             }
 
                             XIII.SectionsParser.MainSections(wdbReader, wdbVarsXIII);
@@ -102,16 +102,17 @@ namespace WDBXlsxConverter
                             break;
 
                         case "-ff132":
-                            var wdbVarsXIII2LR = new XIII2LR.WDBVariablesXIII2LR();
+                            var wdbVarsXIII2LR = new XIII2LR.WDBVariablesXIII2LR
+                            {
+                                WDBName = Path.GetFileNameWithoutExtension(inFile)
+                            };
 
-                            wdbVarsXIII2LR.WDBName = Path.GetFileNameWithoutExtension(inFile);
                             wdbVarsXIII2LR.xlsxName = Path.Combine(Path.GetDirectoryName(inFile), wdbVarsXIII2LR.WDBName + ".xlsx");
-
                             wdbVarsXIII2LR.RecordCount = wdbReader.ReadBytesUInt32(true);
 
                             if (wdbVarsXIII2LR.RecordCount == 0)
                             {
-                                WDBMethods.ErrorExit("No records/sections are present in this file");
+                                SharedMethods.ErrorExit("No records/sections are present in this file");
                             }
 
                             XIII2LR.SectionsParser.MainSections(wdbReader, wdbVarsXIII2LR);
@@ -132,10 +133,17 @@ namespace WDBXlsxConverter
                             break;
 
                         default:
-                            WDBMethods.ErrorExit("Specified gamecode is invalid");
+                            SharedMethods.ErrorExit("Specified gamecode is invalid");
                             break;
                     }
                 }
+
+                Console.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine("Finished converting records to xlsx file");
+                Console.ReadLine();
+
+                Environment.Exit(0);
             }
             catch (Exception ex)
             {
@@ -146,13 +154,6 @@ namespace WDBXlsxConverter
 
                 Environment.Exit(2);
             }
-
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("Finished converting records to xlsx file");
-            Console.ReadLine();
-
-            Environment.Exit(0);
         }
     }
 }

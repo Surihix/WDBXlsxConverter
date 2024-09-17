@@ -133,7 +133,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WDBXlsxConverter\Extensions\BinaryReaderHelpers.cs" />
     <Compile Include="WDBXlsxConverter\Extensions\BitOperationHelpers.cs" />
-    <Compile Include="WDBXlsxConverter\WDBMethods.cs" />
+    <Compile Include="WDBXlsxConverter\SharedMethods.cs" />
     <Compile Include="WDBXlsxConverter\XIII2LR\RecordsParser.cs" />
     <Compile Include="WDBXlsxConverter\XIII2LR\SectionsParser.cs" />
     <Compile Include="WDBXlsxConverter\XIII2LR\StrArrayParser.cs" />

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace WDBXlsxConverter
 {
-    internal class WDBMethods
+    internal class SharedMethods
     {
         public static void ErrorExit(string errorMsg)
         {

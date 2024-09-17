@@ -64,7 +64,7 @@ namespace WDBXlsxConverter.XIII2LR
                 {
                     wdbVars.HasStringSection = true;
 
-                    wdbVars.StringsData = WDBMethods.SaveSectionData(wdbReader, false);
+                    wdbVars.StringsData = SharedMethods.SaveSectionData(wdbReader, false);
                     wdbVars.RecordCount--;
                 }
 
@@ -72,7 +72,7 @@ namespace WDBXlsxConverter.XIII2LR
                 if (sectioNameRead == wdbVars.StrtypelistSectionName)
                 {
                     wdbVars.parseStrtypelistAsV1 = true;
-                    wdbVars.StrtypelistData = WDBMethods.SaveSectionData(wdbReader, false);
+                    wdbVars.StrtypelistData = SharedMethods.SaveSectionData(wdbReader, false);
                     wdbVars.RecordCount--;
                 }
 
@@ -80,7 +80,7 @@ namespace WDBXlsxConverter.XIII2LR
                 if (sectioNameRead == wdbVars.StrtypelistbSectionName)
                 {
                     wdbVars.parseStrtypelistAsV1 = false;
-                    wdbVars.StrtypelistData = WDBMethods.SaveSectionData(wdbReader, false);
+                    wdbVars.StrtypelistData = SharedMethods.SaveSectionData(wdbReader, false);
                     wdbVars.RecordCount--;
                 }
 
@@ -88,28 +88,28 @@ namespace WDBXlsxConverter.XIII2LR
                 if (sectioNameRead == wdbVars.TypelistSectionName)
                 {
                     wdbVars.hasTypelistSection = true;
-                    wdbVars.TypelistData = WDBMethods.SaveSectionData(wdbReader, false);
+                    wdbVars.TypelistData = SharedMethods.SaveSectionData(wdbReader, false);
                     wdbVars.RecordCount--;
                 }
 
                 // !!version
                 if (sectioNameRead == wdbVars.VersionSectionName)
                 {
-                    wdbVars.VersionData = WDBMethods.SaveSectionData(wdbReader, false);
+                    wdbVars.VersionData = SharedMethods.SaveSectionData(wdbReader, false);
                     wdbVars.RecordCount--;
                 }
 
                 // !structitem
                 if (sectioNameRead == wdbVars.StructItemSectionName)
                 {
-                    wdbVars.StructItemData = WDBMethods.SaveSectionData(wdbReader, false);
+                    wdbVars.StructItemData = SharedMethods.SaveSectionData(wdbReader, false);
                     wdbVars.RecordCount--;
                 }
 
                 // !structitemnum
                 if (sectioNameRead == wdbVars.StructItemNumSectionName)
                 {
-                    wdbVars.FieldCount = BitConverter.ToUInt32(WDBMethods.SaveSectionData(wdbReader, true), 0);
+                    wdbVars.FieldCount = BitConverter.ToUInt32(SharedMethods.SaveSectionData(wdbReader, true), 0);
                     wdbVars.RecordCount--;
                 }
 
@@ -123,7 +123,7 @@ namespace WDBXlsxConverter.XIII2LR
 
             if (!imptSectionsParsed)
             {
-                WDBMethods.ErrorExit("Necessary sections were unable to be processed correctly.");
+                SharedMethods.ErrorExit("Necessary sections were unable to be processed correctly.");
             }
 
             if (wdbVars.SheetName == "" || wdbVars.SheetName == null)
@@ -144,7 +144,7 @@ namespace WDBXlsxConverter.XIII2LR
 
             for (int sf = 0; sf < wdbVars.FieldCount; sf++)
             {
-                var derivedString = WDBMethods.DeriveStringFromArray(wdbVars.StructItemData, stringStartPos);
+                var derivedString = SharedMethods.DeriveStringFromArray(wdbVars.StructItemData, stringStartPos);
 
                 if (derivedString == "")
                 {
@@ -187,8 +187,8 @@ namespace WDBXlsxConverter.XIII2LR
 
                 foreach (var k in wdbVars.StrArrayDict)
                 {
-                    WDBMethods.WriteToSheet(strArraySheet, cellX, cellY, $"(Array {strArrayNoIterator}) Index", 2, true);
-                    WDBMethods.WriteToSheet(strArraySheet, cellX, cellY + 1, $"{k.Key}", 2, true);
+                    SharedMethods.WriteToSheet(strArraySheet, cellX, cellY, $"(Array {strArrayNoIterator}) Index", 2, true);
+                    SharedMethods.WriteToSheet(strArraySheet, cellX, cellY + 1, $"{k.Key}", 2, true);
 
                     var prevCellY = cellY;
 
@@ -199,10 +199,10 @@ namespace WDBXlsxConverter.XIII2LR
 
                     foreach (var l in wdbVars.StrArrayDict[k.Key])
                     {
-                        WDBMethods.WriteToSheet(strArraySheet, cellX, prevCellY, indexIterator, 4, false);
+                        SharedMethods.WriteToSheet(strArraySheet, cellX, prevCellY, indexIterator, 4, false);
                         indexIterator++;
 
-                        WDBMethods.WriteToSheet(strArraySheet, cellX, prevCellY + 1, l, 2, false);
+                        SharedMethods.WriteToSheet(strArraySheet, cellX, prevCellY + 1, l, 2, false);
                         cellX++;
                     }
 
@@ -223,9 +223,9 @@ namespace WDBXlsxConverter.XIII2LR
                 cellY = 1;  // horizontal
 
                 var stringSheet = workbook.Worksheets.Add(wdbVars.StringSectionName);
-                WDBMethods.WriteToSheet(stringSheet, cellX, cellY, "Position", 2, true);
-                WDBMethods.WriteToSheet(stringSheet, cellX, cellY + 1, "String", 2, true);
-                WDBMethods.WriteToSheet(stringSheet, cellX, cellY + 2, "Length (with null byte)", 2, true);
+                SharedMethods.WriteToSheet(stringSheet, cellX, cellY, "Position", 2, true);
+                SharedMethods.WriteToSheet(stringSheet, cellX, cellY + 1, "String", 2, true);
+                SharedMethods.WriteToSheet(stringSheet, cellX, cellY + 2, "Length (with null byte)", 2, true);
 
                 cellX++;
 
@@ -237,7 +237,7 @@ namespace WDBXlsxConverter.XIII2LR
                         break;
                     }
 
-                    var derivedString = WDBMethods.DeriveStringFromArray(wdbVars.StringsData, stringStartPos);
+                    var derivedString = SharedMethods.DeriveStringFromArray(wdbVars.StringsData, stringStartPos);
                     var derivedStringLength = Encoding.UTF8.GetByteCount(derivedString) + 1;
 
                     if (derivedString == "")
@@ -245,9 +245,9 @@ namespace WDBXlsxConverter.XIII2LR
                         derivedString = "{null}";
                     }
 
-                    WDBMethods.WriteToSheet(stringSheet, cellX, cellY, stringStartPos, 4, false);
-                    WDBMethods.WriteToSheet(stringSheet, cellX, cellY + 1, derivedString, 2, false);
-                    WDBMethods.WriteToSheet(stringSheet, cellX, cellY + 2, derivedStringLength, 4, false);
+                    SharedMethods.WriteToSheet(stringSheet, cellX, cellY, stringStartPos, 4, false);
+                    SharedMethods.WriteToSheet(stringSheet, cellX, cellY + 1, derivedString, 2, false);
+                    SharedMethods.WriteToSheet(stringSheet, cellX, cellY + 2, derivedStringLength, 4, false);
 
                     stringStartPos += derivedStringLength;
 
@@ -267,8 +267,8 @@ namespace WDBXlsxConverter.XIII2LR
             var strtypelistSheet = workbook.Worksheets.Add(strtypelistSheetName);
             var strtypelistValueFieldName = wdbVars.parseStrtypelistAsV1 ? "Strtypelist Value" : "Strtypelistb Value";
 
-            WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY, "Field Name", 2, true);
-            WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistValueFieldName, 2, true);
+            SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY, "Field Name", 2, true);
+            SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistValueFieldName, 2, true);
 
             cellX++;
 
@@ -303,7 +303,7 @@ namespace WDBXlsxConverter.XIII2LR
                         {
                             currentField = wdbVars.Fields[f];
                             var fieldType = currentField.Substring(0, 1);
-                            var fieldNum = WDBMethods.DeriveFieldNumber(currentField);
+                            var fieldNum = SharedMethods.DeriveFieldNumber(currentField);
 
                             switch (fieldType)
                             {
@@ -311,8 +311,8 @@ namespace WDBXlsxConverter.XIII2LR
                                 case "i":
                                     if (fieldNum == 0)
                                     {
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
                                         cellX++;
 
                                         fieldBitsToProcess = 0;
@@ -326,8 +326,8 @@ namespace WDBXlsxConverter.XIII2LR
                                     }
                                     else
                                     {
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
                                         cellX++;
 
                                         fieldBitsToProcess -= fieldNum;
@@ -343,8 +343,8 @@ namespace WDBXlsxConverter.XIII2LR
                                 case "u":
                                     if (fieldNum == 0)
                                     {
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
                                         cellX++;
 
                                         fieldBitsToProcess = 0;
@@ -358,8 +358,8 @@ namespace WDBXlsxConverter.XIII2LR
                                     }
                                     else
                                     {
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
                                         cellX++;
 
                                         fieldBitsToProcess -= fieldNum;
@@ -375,8 +375,8 @@ namespace WDBXlsxConverter.XIII2LR
                                 case "f":
                                     if (fieldNum == 0)
                                     {
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
                                         cellX++;
 
                                         fieldBitsToProcess = 0;
@@ -390,8 +390,8 @@ namespace WDBXlsxConverter.XIII2LR
                                     }
                                     else
                                     {
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
                                         cellX++;
 
                                         fieldBitsToProcess -= fieldNum;
@@ -413,8 +413,8 @@ namespace WDBXlsxConverter.XIII2LR
                                     }
                                     else
                                     {
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
-                                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
+                                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
                                         cellX++;
 
                                         fieldBitsToProcess -= fieldNum;
@@ -433,8 +433,8 @@ namespace WDBXlsxConverter.XIII2LR
 
                     // float value
                     case 1:
-                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
-                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
+                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
+                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
                         cellX++;
 
                         strtypelistbIndex += strtypelistIndexAdjust;
@@ -442,8 +442,8 @@ namespace WDBXlsxConverter.XIII2LR
 
                     // !!string section offset
                     case 2:
-                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
-                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
+                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
+                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
                         cellX++;
 
                         strtypelistbIndex += strtypelistIndexAdjust;
@@ -451,8 +451,8 @@ namespace WDBXlsxConverter.XIII2LR
 
                     // uint
                     case 3:
-                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
-                        WDBMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
+                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY, $"{currentField}", 2, false);
+                        SharedMethods.WriteToSheet(strtypelistSheet, cellX, cellY + 1, strtypelistbValue, 4, false);
                         cellX++;
 
                         strtypelistbIndex += strtypelistIndexAdjust;
@@ -472,14 +472,14 @@ namespace WDBXlsxConverter.XIII2LR
                 cellY = 1;
 
                 var typelistSheet = workbook.Worksheets.Add(wdbVars.TypelistSectionName);
-                WDBMethods.WriteToSheet(typelistSheet, cellX, cellY, "Typelist Value", 2, true);
+                SharedMethods.WriteToSheet(typelistSheet, cellX, cellY, "Typelist Value", 2, true);
 
                 cellX++;
 
                 var sectionIndex = 0;
                 for (int i = 0; i < wdbVars.TypelistData.Length / 4; i++)
                 {
-                    WDBMethods.WriteToSheet(typelistSheet, cellX, cellY, WDBMethods.DeriveUIntFromSectionData(wdbVars.TypelistData, sectionIndex, true), 4, false);
+                    SharedMethods.WriteToSheet(typelistSheet, cellX, cellY, SharedMethods.DeriveUIntFromSectionData(wdbVars.TypelistData, sectionIndex, true), 4, false);
                     cellX++;
 
                     sectionIndex += 4;

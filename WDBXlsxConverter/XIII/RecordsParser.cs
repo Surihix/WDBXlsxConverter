@@ -18,12 +18,12 @@ namespace WDBXlsxConverter.XIII
             if (wdbVars.IsKnown)
             {
                 mainSheet = workbook.Worksheets.Add(wdbVars.SheetName);
-                WDBMethods.WriteToSheet(mainSheet, cellX, cellY, "Record", 2, true);
+                SharedMethods.WriteToSheet(mainSheet, cellX, cellY, "Record", 2, true);
                 cellY++;
 
                 foreach (var fieldCell in wdbVars.Fields)
                 {
-                    WDBMethods.WriteToSheet(mainSheet, cellX, cellY, fieldCell, 2, true);
+                    SharedMethods.WriteToSheet(mainSheet, cellX, cellY, fieldCell, 2, true);
                     cellY++;
                 }
 
@@ -34,7 +34,7 @@ namespace WDBXlsxConverter.XIII
             else
             {
                 mainSheet = workbook.Worksheets.Add(wdbVars.WDBName);
-                WDBMethods.WriteToSheet(mainSheet, cellX, cellY, "Record", 2, true);
+                SharedMethods.WriteToSheet(mainSheet, cellX, cellY, "Record", 2, true);
                 cellY++;
 
                 ParseRecordsWithoutFields(wdbVars, mainSheet, cellX, cellY, wdbReader);
@@ -75,29 +75,29 @@ namespace WDBXlsxConverter.XIII
 
                 cellY = 1;
                 Console.WriteLine($"Record: {currentRecordName}");
-                WDBMethods.WriteToSheet(mainSheet, cellX, cellY, currentRecordName, 2, false);
+                SharedMethods.WriteToSheet(mainSheet, cellX, cellY, currentRecordName, 2, false);
                 cellY++;
 
-                currentRecordData = WDBMethods.SaveSectionData(wdbReader, false);
+                currentRecordData = SharedMethods.SaveSectionData(wdbReader, false);
 
                 for (int f = 0; f < wdbVars.FieldCount; f++)
                 {
                     switch (wdbVars.StrtypelistValues[strTypeListIndex])
                     {
+                        // bitpacked
                         case 0:
-                            var binaryData = BitOperationHelpers.UIntToBinary(WDBMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true));
+                            var binaryData = BitOperationHelpers.UIntToBinary(SharedMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true));
                             var binaryDataIndex = binaryData.Length;
                             var fieldBitsToProcess = 32;
 
                             int iTypedataVal;
                             uint uTypeDataVal;
-                            //float fTypeDataVal;
-                            string fTypeBinary;
+                            int fTypeDataVal;
 
                             while (fieldBitsToProcess != 0 && f < wdbVars.FieldCount)
                             {
                                 var fieldType = wdbVars.Fields[f].Substring(0, 1);
-                                var fieldNum = WDBMethods.DeriveFieldNumber(wdbVars.Fields[f]);
+                                var fieldNum = SharedMethods.DeriveFieldNumber(wdbVars.Fields[f]);
 
                                 switch (fieldType)
                                 {
@@ -109,7 +109,7 @@ namespace WDBXlsxConverter.XIII
                                             fieldBitsToProcess = 0;
 
                                             Console.WriteLine($"{wdbVars.Fields[f]}: {iTypedataVal}");
-                                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, iTypedataVal, 4, false);
+                                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, iTypedataVal, 4, false);
                                             cellY++;
 
                                             break;
@@ -128,7 +128,7 @@ namespace WDBXlsxConverter.XIII
                                             fieldBitsToProcess -= fieldNum;
 
                                             Console.WriteLine($"{wdbVars.Fields[f]}: {iTypedataVal}");
-                                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, iTypedataVal, 4, false);
+                                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, iTypedataVal, 4, false);
                                             cellY++;
 
                                             if (fieldBitsToProcess != 0)
@@ -146,7 +146,7 @@ namespace WDBXlsxConverter.XIII
                                             fieldBitsToProcess = 0;
 
                                             Console.WriteLine($"{wdbVars.Fields[f]}: {uTypeDataVal}");
-                                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, uTypeDataVal, 3, false);
+                                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, uTypeDataVal, 3, false);
                                             cellY++;
 
                                             break;
@@ -165,7 +165,7 @@ namespace WDBXlsxConverter.XIII
                                             fieldBitsToProcess -= fieldNum;
 
                                             Console.WriteLine($"{wdbVars.Fields[f]}: {uTypeDataVal}");
-                                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, uTypeDataVal, 3, false);
+                                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, uTypeDataVal, 3, false);
                                             cellY++;
 
                                             if (fieldBitsToProcess != 0)
@@ -175,15 +175,15 @@ namespace WDBXlsxConverter.XIII
                                         }
                                         break;
 
-                                    // float (dump as binary) 
+                                    // float (bitpacked as int) 
                                     case "f":
                                         if (fieldNum == 0)
                                         {
-                                            fTypeBinary = binaryData.Substring(binaryDataIndex - 32, 32);
+                                            fTypeDataVal = BitOperationHelpers.BinaryToInt(binaryData, binaryDataIndex - 32, 32);
                                             fieldBitsToProcess = 0;
 
-                                            Console.WriteLine($"{wdbVars.Fields[f]}: {fTypeBinary}");
-                                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, fTypeBinary, 2, false);
+                                            Console.WriteLine($"{wdbVars.Fields[f]}: {fTypeDataVal}");
+                                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, fTypeDataVal, 4, false);
                                             cellY++;
 
                                             break;
@@ -198,11 +198,11 @@ namespace WDBXlsxConverter.XIII
                                         {
                                             binaryDataIndex -= fieldNum;
 
-                                            fTypeBinary = binaryData.Substring(binaryDataIndex, fieldNum);
+                                            fTypeDataVal = BitOperationHelpers.BinaryToInt(binaryData, binaryDataIndex, fieldNum);
                                             fieldBitsToProcess -= fieldNum;
 
-                                            Console.WriteLine($"{wdbVars.Fields[f]}: {fTypeBinary}");
-                                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, fTypeBinary, 2, false);
+                                            Console.WriteLine($"{wdbVars.Fields[f]}: {fTypeDataVal}");
+                                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, fTypeDataVal, 4, false);
                                             cellY++;
 
                                             if (fieldBitsToProcess != 0)
@@ -211,43 +211,6 @@ namespace WDBXlsxConverter.XIII
                                             }
                                         }
                                         break;
-
-                                        // // float 
-                                        //case "f":
-                                        //    if (fieldNum == 0)
-                                        //    {
-                                        //        fTypeDataVal = BitOperationHelpers.BinaryToFloat(binaryData, binaryDataIndex - 32, 32);
-                                        //        fieldBitsToProcess = 0;
-
-                                        //        Console.WriteLine($"{wdbVars.Fields[f]}: {fTypeDataVal}");
-                                        //        WDBMethods.WriteToWorkSheet(mainSheet, recordCellX, recordCellY, fTypeDataVal.ToString(), false);
-                                        //        recordCellY++;
-
-                                        //        break;
-                                        //    }
-                                        //    if (fieldNum > fieldBitsToProcess)
-                                        //    {
-                                        //        f--;
-                                        //        fieldBitsToProcess = 0;
-                                        //        continue;
-                                        //    }
-                                        //    else
-                                        //    {
-                                        //        binaryDataIndex -= fieldNum;
-
-                                        //        fTypeDataVal = BitOperationHelpers.BinaryToFloat(binaryData, binaryDataIndex, fieldNum);
-                                        //        fieldBitsToProcess -= fieldNum;
-
-                                        //        Console.WriteLine($"{wdbVars.Fields[f]}: {fTypeDataVal}");
-                                        //        WDBMethods.WriteToWorkSheet(mainSheet, recordCellX, recordCellY, fTypeDataVal.ToString(), false);
-                                        //        recordCellY++;
-
-                                        //        if (fieldBitsToProcess != 0)
-                                        //        {
-                                        //            f++;
-                                        //        }
-                                        //    }
-                                        //    break;
                                 }
                             }
 
@@ -257,10 +220,10 @@ namespace WDBXlsxConverter.XIII
 
                         // float value
                         case 1:
-                            var floatDataVal = WDBMethods.DeriveFloatFromSectionData(currentRecordData, currentRecordDataIndex, true);
+                            var floatDataVal = SharedMethods.DeriveFloatFromSectionData(currentRecordData, currentRecordDataIndex, true);
 
                             Console.WriteLine($"{wdbVars.Fields[f]}: {floatDataVal}");
-                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, floatDataVal, 1, false);
+                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, floatDataVal, 1, false);
                             cellY++;
 
                             strTypeListIndex++;
@@ -269,8 +232,8 @@ namespace WDBXlsxConverter.XIII
 
                         // !!string section offset
                         case 2:
-                            var stringDataOffset = WDBMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true);
-                            var derivedString = WDBMethods.DeriveStringFromArray(wdbVars.StringsData, (int)stringDataOffset);
+                            var stringDataOffset = SharedMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true);
+                            var derivedString = SharedMethods.DeriveStringFromArray(wdbVars.StringsData, (int)stringDataOffset);
 
                             if (derivedString == "")
                             {
@@ -278,14 +241,14 @@ namespace WDBXlsxConverter.XIII
                             }
 
                             Console.WriteLine($"{wdbVars.Fields[f]}: {derivedString}");
-                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, derivedString, 2, false);
+                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, derivedString, 2, false);
                             cellY++;
 
                             strTypeListIndex++;
                             currentRecordDataIndex += 4;
                             break;
 
-                        // uint
+                        // uint value
                         case 3:
                             if (wdbVars.Fields[f].StartsWith("u64"))
                             {
@@ -296,7 +259,7 @@ namespace WDBXlsxConverter.XIII
                                 var ulTypeDataVal = BitConverter.ToUInt64(processArray, 0);
 
                                 Console.WriteLine($"{wdbVars.Fields[f]}(uint64): {ulTypeDataVal}");
-                                WDBMethods.WriteToSheet(mainSheet, cellX, cellY, ulTypeDataVal, 5, false);
+                                SharedMethods.WriteToSheet(mainSheet, cellX, cellY, ulTypeDataVal, 5, false);
                                 cellY++;
 
                                 strTypeListIndex++;
@@ -304,10 +267,10 @@ namespace WDBXlsxConverter.XIII
                                 break;
                             }
 
-                            var uintDataVal = WDBMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true);
+                            var uintDataVal = SharedMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true);
 
                             Console.WriteLine($"{wdbVars.Fields[f]}(uint32): {uintDataVal}");
-                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, uintDataVal, 3, false);
+                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, uintDataVal, 3, false);
                             cellY++;
 
                             strTypeListIndex++;
@@ -328,21 +291,30 @@ namespace WDBXlsxConverter.XIII
 
         private static void ParseRecordsWithoutFields(WDBVariablesXIII wdbVars, IXLWorksheet mainSheet, int cellX, int cellY, BinaryReader br)
         {
+            var bitpackedFieldCounter = 0;
+            var floatFieldCounter = 0;
+            var stringFieldCounter = 0;
+            var uintFieldCounter = 0;
+
             foreach (var strtypelistValue in wdbVars.StrtypelistValues)
             {
                 switch (strtypelistValue)
                 {
                     case 0:
-                        WDBMethods.WriteToSheet(mainSheet, cellX, cellY, "BitPacked", 2, true);
+                        SharedMethods.WriteToSheet(mainSheet, cellX, cellY, $"bitpacked-field_{bitpackedFieldCounter}", 2, true);
+                        bitpackedFieldCounter++;
                         break;
                     case 1:
-                        WDBMethods.WriteToSheet(mainSheet, cellX, cellY, "Float", 2, true);
+                        SharedMethods.WriteToSheet(mainSheet, cellX, cellY, $"float-field_{floatFieldCounter}", 2, true);
+                        floatFieldCounter++;
                         break;
                     case 2:
-                        WDBMethods.WriteToSheet(mainSheet, cellX, cellY, "!!string", 2, true);
+                        SharedMethods.WriteToSheet(mainSheet, cellX, cellY, $"!!string-field_{stringFieldCounter}", 2, true);
+                        stringFieldCounter++;
                         break;
                     case 3:
-                        WDBMethods.WriteToSheet(mainSheet, cellX, cellY, "Unsigned Integer", 2, true);
+                        SharedMethods.WriteToSheet(mainSheet, cellX, cellY, $"uint-field_{uintFieldCounter}", 2, true);
+                        uintFieldCounter++;
                         break;
                 }
 
@@ -370,10 +342,10 @@ namespace WDBXlsxConverter.XIII
 
                 cellY = 1;
                 Console.WriteLine($"Record: {currentRecordName}");
-                WDBMethods.WriteToSheet(mainSheet, cellX, cellY, currentRecordName, 2, false);
+                SharedMethods.WriteToSheet(mainSheet, cellX, cellY, currentRecordName, 2, false);
                 cellY++;
 
-                currentRecordData = WDBMethods.SaveSectionData(br, false);
+                currentRecordData = SharedMethods.SaveSectionData(br, false);
                 currentRecordDataIndex = 0;
 
                 for (int f = 0; f < wdbVars.FieldCount; f++)
@@ -381,30 +353,30 @@ namespace WDBXlsxConverter.XIII
                     switch (wdbVars.StrtypelistValues[f])
                     {
                         case 0:
-                            uintValue = WDBMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true);
+                            uintValue = SharedMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true);
                             bitpackedData = uintValue.ToString("X").PadLeft(8, '0');
-                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, "0x" + bitpackedData, 2, false);
+                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, "0x" + bitpackedData, 2, false);
                             break;
 
                         case 1:
-                            floatValue = WDBMethods.DeriveFloatFromSectionData(currentRecordData, currentRecordDataIndex, true);
-                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, floatValue, 1, false);
+                            floatValue = SharedMethods.DeriveFloatFromSectionData(currentRecordData, currentRecordDataIndex, true);
+                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, floatValue, 1, false);
                             break;
 
                         case 2:
-                            stringValueOffset = WDBMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true); ;
-                            stringValue = WDBMethods.DeriveStringFromArray(wdbVars.StringsData, (int)stringValueOffset);
+                            stringValueOffset = SharedMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true); ;
+                            stringValue = SharedMethods.DeriveStringFromArray(wdbVars.StringsData, (int)stringValueOffset);
 
                             if (stringValue == "")
                             {
                                 stringValue = "{null}";
                             }
-                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, stringValue, 2, false);
+                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, stringValue, 2, false);
                             break;
 
                         case 3:
-                            uintValue = WDBMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true);
-                            WDBMethods.WriteToSheet(mainSheet, cellX, cellY, uintValue, 3, false);
+                            uintValue = SharedMethods.DeriveUIntFromSectionData(currentRecordData, currentRecordDataIndex, true);
+                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, uintValue, 3, false);
                             break;
                     }
 

@@ -46,10 +46,4 @@ internal class BitOperationHelpers
             return finalComputedVal;
         }
     }
-
-
-    public static float BinaryToFloat(string binaryVal, int startPosition, int count)
-    {
-        return 0;
-    }
 }

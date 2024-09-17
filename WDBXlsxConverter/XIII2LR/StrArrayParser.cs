@@ -12,13 +12,13 @@ namespace WDBXlsxConverter.XIII2LR
 
             // !!strArray
             _ = wdbReader.BaseStream.Position = readPos;
-            WDBMethods.CheckSectionName(wdbReader, wdbVars.StrArraySectionName);
-            wdbVars.StrArrayData = WDBMethods.SaveSectionData(wdbReader, false);
+            SharedMethods.CheckSectionName(wdbReader, wdbVars.StrArraySectionName);
+            wdbVars.StrArrayData = SharedMethods.SaveSectionData(wdbReader, false);
             wdbVars.RecordCount--;
 
             // !!strArrayInfo
             _ = wdbReader.BaseStream.Position = readPos + 32;
-            WDBMethods.CheckSectionName(wdbReader, wdbVars.StrArrayInfoSectionName);
+            SharedMethods.CheckSectionName(wdbReader, wdbVars.StrArrayInfoSectionName);
 
             _ = wdbReader.BaseStream.Position = wdbReader.ReadBytesUInt32(true) + 2;
             wdbVars.OffsetsPerValue = wdbReader.ReadByte();
@@ -33,8 +33,8 @@ namespace WDBXlsxConverter.XIII2LR
 
             // !!strArrayList
             _ = wdbReader.BaseStream.Position = readPos + 64;
-            WDBMethods.CheckSectionName(wdbReader, wdbVars.StrArrayListSectionName);
-            wdbVars.StrArrayListData = WDBMethods.SaveSectionData(wdbReader, false);
+            SharedMethods.CheckSectionName(wdbReader, wdbVars.StrArrayListSectionName);
+            wdbVars.StrArrayListData = SharedMethods.SaveSectionData(wdbReader, false);
             wdbVars.RecordCount--;
         }
 
@@ -63,7 +63,7 @@ namespace WDBXlsxConverter.XIII2LR
             {
                 if (fieldItem.StartsWith("s"))
                 {
-                    fieldNumber = WDBMethods.DeriveFieldNumber(fieldItem);
+                    fieldNumber = SharedMethods.DeriveFieldNumber(fieldItem);
 
                     if (fieldNumber != 0)
                     {
@@ -74,7 +74,7 @@ namespace WDBXlsxConverter.XIII2LR
 
             if (wdbVars.StrArrayOffsets.Count != wdbVars.NumStringFields.Count)
             {
-                WDBMethods.ErrorExit("StrArrayOffsets count does not match with the detected amount of s# fields");
+                SharedMethods.ErrorExit("StrArrayOffsets count does not match with the detected amount of s# fields");
             }
 
 
