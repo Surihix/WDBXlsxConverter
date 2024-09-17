@@ -27,6 +27,7 @@ namespace WDBXlsxConverter.XIII
             { "item_consume", "item_consume" },
             { "special_ability", "SpecialAbility" },
             { "item_weapon", "ItemWeapon" },
+            { "party", "Party" },
 
             // ps3
             { "movie_items.ps3", "movie_items_ps3" },
@@ -274,6 +275,20 @@ namespace WDBXlsxConverter.XIII
                     "u7UnkVal12", "u14DisasRate2", "u14DisasRate3", "u7UnkVal13", "u14DisasRate4", 
                     "u7UnkVal14", "u14DisasRate5"
                 } 
+            },
+
+            { "Party", 
+                new List<string>()
+                {
+                    "sCharaSpecId", "sSubCharaSpecId0", "sSubCharaSpecId1", "sSubCharaSpecId2",
+                    "sSubCharaSpecId3", "sSubCharaSpecId4", "sSubCharaSpecId5", "sSubCharaSpecId6",
+                    "sSubCharaSpecId7", "sSubCharaSpecId8", "sRideObjectCharaSpecId0",
+                    "sRideObjectCharaSpecId1", "sFieldFreeCameraSettingResourceId", "sIconResourceId",
+                    "sScriptIdOnPartyCharaAIStarted", "sScriptIdOnIdle", "sBattleCharaSpecId", "sSummonId",
+                    "fStopDistance", "fWalkDistance", "fPlayerRestraint", "u1IsEnableUserControl",
+                    "u5OrderNumForCrest", "u8OrderNumForTool", "u7Expresspower", "u7Willpower",
+                    "u7Brightness", "u7Cognition"
+                }
             }
         };
     }
