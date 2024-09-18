@@ -18,7 +18,7 @@ This program allows you to convert the WDB database files from the FF13 game tri
 ## Important notes
 - The WDB file has to be specified after the game code argument switch.
 
-- Field names will be present in the xlsx file only for some of 13-1's WDB files. refer to this [page](https://github.com/LR-Research-Team/Datalog/wiki/WDB-Field-Names) for information about the field names.
+- Field names will be present in the xlsx file only for some WDB files from 13-1. refer to this [page](https://github.com/LR-Research-Team/Datalog/wiki/WDB-Field-Names) for information about the field names.
 
 - When using the `-ff131` game code switch, you can specify an optional `-i` argument switch after the WDB file, to prevent generating field names for the records.
 
