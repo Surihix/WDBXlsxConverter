@@ -6,7 +6,7 @@ namespace WDBXlsxConverter.XIII
     {
         public static readonly Dictionary<string, string> RecordIDs = new Dictionary<string, string>()
         {
-            // win32
+            // db/resident
             { "auto_clip", "AutoClip" },
             { "white", "Resident" },
             { "sound_fileid_dic", "SoundFileIdDic" },
@@ -14,8 +14,6 @@ namespace WDBXlsxConverter.XIII
             { "sound_filename_dic", "SoundFileNameDic" },
             { "sound_filename_dic_us", "SoundFileNameDic" },
             { "treasurebox", "TreasureBox" },
-            { "movie_items.win32", "movie_items" },
-            { "movie_items_us.win32", "movie_items" },
             { "zonelist", "ZoneList" },
             { "monster_book", "MonsterBook" },
             { "savepoint", "savepoint" },
@@ -28,6 +26,12 @@ namespace WDBXlsxConverter.XIII
             { "special_ability", "SpecialAbility" },
             { "item_weapon", "ItemWeapon" },
             { "party", "Party" },
+            { "succession", "Succession" },
+            { "bt_summon", "bt_summon" },
+
+            // win32
+            { "movie_items.win32", "movie_items" },
+            { "movie_items_us.win32", "movie_items" },
 
             // ps3
             { "movie_items.ps3", "movie_items_ps3" },
@@ -115,7 +119,15 @@ namespace WDBXlsxConverter.XIII
             { "script00029", "Script" },
             { "script00030", "Script" },
             { "script00105", "Script" },
-            { "script00106", "Script" }
+            { "script00106", "Script" },
+
+            // db/crystal
+            { "crystal_fang", "crystal" },
+            { "crystal_hope", "crystal" },
+            { "crystal_lightning", "crystal" },
+            { "crystal_sazh", "crystal" },
+            { "crystal_snow", "crystal" },
+            { "crystal_vanille", "crystal" },
         };
 
 
@@ -288,6 +300,44 @@ namespace WDBXlsxConverter.XIII
                     "fStopDistance", "fWalkDistance", "fPlayerRestraint", "u1IsEnableUserControl",
                     "u5OrderNumForCrest", "u8OrderNumForTool", "u7Expresspower", "u7Willpower",
                     "u7Brightness", "u7Cognition"
+                }
+            },
+
+            {
+                "Succession",
+                new List<string>()
+                {
+                    "u1RideOffChocobo", "i2NaviMapMode", "i2PartyCharaAIMode", "i2UserControlMode",
+                    "i9ZoneStateChangeTriggerOnEnter","i9ZoneStateWait", "u1EventSkipAble",
+                    "u1FieldCommonObjectHide", "u1EnablePause", "u1SuspendFieldObject",
+                    "u1DisableTalk", "i9ZoneStateChangeTriggerOnExit", "i9ZoneStateExit",
+                    "u13CameraInterporationTimeOnEnter", "u1FieldActiveFlag",
+                    "u13CameraInterporationTimeOnExit", "u1HighModelEventFlag",
+                    "u1ApplyFieldCameraByPlayerMatrix"
+                }
+            },
+
+            {
+                "bt_summon",
+                new List<string>()
+                {
+                    "iSummonKind", "sCharaSet", "sBtChSpec0", "sBtChSpec1", "sSummonInEv", "sDriveInEv",
+                    "sFinishArtsEv", "iMaxSp0", "iMaxSp1", "iMaxSp2", "iMaxSp3", "iMaxSp4", "iMaxSp5",
+                    "iMaxSp6", "iMaxSp7", "iMaxSp8", "iMaxSp9", "iMaxSp10", "iMaxSp11", "iMaxSp12",
+                    "iMaxSp13", "iMaxSp14", "iMaxSp15", "iMaxSp16", "u16Str0", "u16Str1", "u16Str2",
+                    "u16Str3", "u16Str4", "u16Str5", "u16Str6", "u16Str7", "u16Str8", "u16Str9", "u16Str10",
+                    "u16Str11", "u16Str12", "u16Str13", "u16Str14", "u16Str15", "u16Str16", "u16Mag0",
+                    "u16Mag1", "u16Mag2", "u16Mag3", "u16Mag4", "u16Mag5", "u16Mag6", "u16Mag7", "u16Mag8",
+                    "u16Mag9", "u16Mag10", "u16Mag11", "u16Mag12", "u16Mag13", "u16Mag14", "u16Mag15",
+                    "u16Mag16"
+                }
+            },
+
+            {
+                "crystal",
+                new List<string>()
+                {
+                    "uCPCost", "sAbilityID", "u4Role", "u4CrystalStage", "u8NodeType", "u16NodeVal"
                 }
             }
         };
