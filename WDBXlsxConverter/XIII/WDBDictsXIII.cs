@@ -28,6 +28,11 @@ namespace WDBXlsxConverter.XIII
             { "party", "Party" },
             { "succession", "Succession" },
             { "bt_summon", "bt_summon" },
+            { "movie", "movie" },
+            { "actioneffect", "ActionEffect" },
+            { "attreffect", "AttributeEffectResource" },
+            { "attreffectstate", "AttributeEffectStateResource" },
+            { "bt_ability", "BattleAbility" },
 
             // win32
             { "movie_items.win32", "movie_items" },
@@ -41,7 +46,7 @@ namespace WDBXlsxConverter.XIII
             { "movie_items.x360", "movie_items" },
             { "movie_items_us.x360", "movie_items" },
 
-            // zone
+            // zone/z###
             { "z000", "Zone" },
             { "z001", "Zone" },
             { "z002", "Zone" },
@@ -273,23 +278,23 @@ namespace WDBXlsxConverter.XIII
             },
 
             // partial
-            { "ItemWeapon", 
+            { "ItemWeapon",
                 new List<string>()
                 {
-                    "sWeaponCharaSpecId", "sWeaponCharaSpecId2", "sAbility", "sAbility2", "sAbility3", 
+                    "sWeaponCharaSpecId", "sWeaponCharaSpecId2", "sAbility", "sAbility2", "sAbility3",
                     "sUpgradeAbility", "sAbilityHelpStringId", "uBuyPriceIncrement", "uSellPriceIncrement",
                     "sDisasItem1", "sDisasItem2", "sDisasItem3", "sDisasItem4", "sDisasItem5", "u8UnkVal1",
                     "u8UnkVal2", "u2UnkVal3", "u7MaxLvl", "u4UnkVal4", "u1UnkBool1", "u1UnkBool2", "u1UnkBool3",
                     "i10ExpRate1", "i10ExpRate2", "i10ExpRate3", "u1UnkBool4", "u1UnkBool5", "u8StatusModKind0",
-                    "u8StatusModKind1", "u4StatusModType", "u1UnkBool6", "u1UnkBool7", "u16UnkVal5", 
-                    "i16StatusModVal", "u16UnkVal6", "i16AttackModVal", "u16UnkVal7", "i16MagicModVal", 
-                    "i16AtbModVal", "u16UnkVal8", "u16UnkVal9", "u16UnkVal10", "u14DisasRate1", "u7UnkVal11", 
-                    "u7UnkVal12", "u14DisasRate2", "u14DisasRate3", "u7UnkVal13", "u14DisasRate4", 
+                    "u8StatusModKind1", "u4StatusModType", "u1UnkBool6", "u1UnkBool7", "u16UnkVal5",
+                    "i16StatusModVal", "u16UnkVal6", "i16AttackModVal", "u16UnkVal7", "i16MagicModVal",
+                    "i16AtbModVal", "u16UnkVal8", "u16UnkVal9", "u16UnkVal10", "u14DisasRate1", "u7UnkVal11",
+                    "u7UnkVal12", "u14DisasRate2", "u14DisasRate3", "u7UnkVal13", "u14DisasRate4",
                     "u7UnkVal14", "u14DisasRate5"
-                } 
+                }
             },
 
-            { "Party", 
+            { "Party",
                 new List<string>()
                 {
                     "sCharaSpecId", "sSubCharaSpecId0", "sSubCharaSpecId1", "sSubCharaSpecId2",
@@ -338,6 +343,94 @@ namespace WDBXlsxConverter.XIII
                 new List<string>()
                 {
                     "uCPCost", "sAbilityID", "u4Role", "u4CrystalStage", "u8NodeType", "u16NodeVal"
+                }
+            },
+
+            {
+                "movie",
+                new List<string>()
+                {
+                    "sZoneName0", "sZoneName1"
+                }
+            },
+
+            {
+                "ActionEffect",
+                new List<string>()
+                {
+                    "sEffectId", "iEffectArg1", "sSoundId"
+                }
+            },
+
+            {
+                "AttributeEffectResource",
+                new List<string>()
+                {
+                    "sFootSoundResourceNameDefaultAttr", "sFootSoundResourceNameDrySoilAttr",
+                    "sFootSoundResourceNameDampSoilAttr", "sFootSoundResourceNameGrassAttr",
+                    "sFootSoundResourceNameBushAttr", "sFootSoundResourceNameSandAttr",
+                    "sFootSoundResourceNameWoodAttr", "sFootSoundResourceNameBoardAttr",
+                    "sFootSoundResourceNameFlooringAttr", "sFootSoundResourceNameStoneAttr",
+                    "sFootSoundResourceNameGravelAttr", "sFootSoundResourceNameIronAttr",
+                    "sFootSoundResourceNameThinIronAttr", "sFootSoundResourceNameClothAttr",
+                    "sFootSoundResourceNameEartenwareAttr", "sFootSoundResourceNameCrystalAttr",
+                    "sFootSoundResourceNameGlassAttr", "sFootSoundResourceNameIceAttr",
+                    "sFootSoundResourceNameWaterAttr", "sFootSoundResourceNameAsphaltAttr",
+                    "sFootSoundResourceNameNoneAttr", "sFootSoundResourceNameWireNetAttr",
+                    "sFootSoundResourceNameBranchOfMachineAttr", "sFootSoundResourceNameBranchOfNatureAttr",
+                    "sFootSoundResourceNameCorkAttr", "sFootSoundResourceNameMarbleAttr",
+                    "sFootSoundResourceNameHologramAttr", "sFootVfxResourceNameDefaultAttr",
+                    "sFootVfxResourceNameDrySoilAttr", "sFootVfxResourceNameDampSoilAttr",
+                    "sFootVfxResourceNameGrassAttr", "sFootVfxResourceNameBushAttr",
+                    "sFootVfxResourceNameSandAttr", "sFootVfxResourceNameWoodAttr",
+                    "sFootVfxResourceNameBoardAttr", "sFootVfxResourceNameFlooringAttr",
+                    "sFootVfxResourceNameStoneAttr", "sFootVfxResourceNameGravelAttr",
+                    "sFootVfxResourceNameIronAttr", "sFootVfxResourceNameThinIronAttr",
+                    "sFootVfxResourceNameClothAttr", "sFootVfxResourceNameEartenwareAttr",
+                    "sFootVfxResourceNameCrystalAttr", "sFootVfxResourceNameGlassAttr",
+                    "sFootVfxResourceNameIceAttr", "sFootVfxResourceNameWaterAttr",
+                    "sFootVfxResourceNameAsphaltAttr", "sFootVfxResourceNameNoneAttr",
+                    "sFootVfxResourceNameWireNetAttr", "sFootVfxResourceNameBranchOfMachineAttr",
+                    "sFootVfxResourceNameBranchOfNatureAttr", "sFootVfxResourceNameCorkAttr",
+                    "sFootVfxResourceNameMarbleAttr", "sFootVfxResourceNameHologramAttr"
+                }
+            },
+
+            {
+                "AttributeEffectStateResource",
+                new List<string>()
+                {
+                    "sWalk", "sRun", "sJump", "sRetreat", "sLanding", "sSliding", "sSquat", "sStand", "sFly"
+                }
+            },
+
+            {
+                "BattleAbility",
+                new List<string>()
+                {
+                    "sStringResId", "sInfoStResId", "sScriptId", "sAblArgStr0", "sAblArgStr1",
+                    "sAutoAblStEff0", "fDistanceMin", "fDistanceMax", "fMaxJumpHeight", "fYDistanceMin",
+                    "fYDistanceMax", "fAirJpHeight", "fAirJpTime", "sReplaceAirAttack", "sReplaceAirAir",
+                    "sReplaceRangeAtk", "sReplaceFinAtk", "sReplaceEnAttr", "iExceptionID", "sActionId0",
+                    "sActionId1", "sActionId2", "sActionId3", "sRtDamSrc", "sRefDamSrc", "sSubRefDamSrc",
+                    "sSlamDamSrc", "sCamArtsSeqId0", "sCamArtsSeqId1", "sCamArtsSeqId2", "sCamArtsSeqId3",
+                    "sRedirectAbility0", "sRedirectTo0", "sRedirectAbility1", "sRedirectTo1",
+                    "sRedirectAbility2", "sRedirectTo2", "sRedirectAbility3", "sRedirectTo3", "sSysEffId0",
+                    "iSysEffArg0", "sSysSndId0", "sRtEffId0", "iRtEffArg0", "sRtSndId0", "sRtEffId1",
+                    "iRtEffArg1", "sRtSndId1", "sRtEffId2", "iRtEffArg2", "sRtSndId2", "sRtEffId3",
+                    "iRtEffArg3", "sRtSndId3", "sRtEffId4", "iRtEffArg4", "sRtSndId4", "u1ComAbility",
+                    "u1RsvFlag0", "u1RsvFlag1", "u1RsvFlag2", "u1RsvFlag3", "u1RsvFlag4", "u1RsvFlag5",
+                    "u1RsvFlag6", "u4ArtsNameHideKd", "u16ArtsNameFrame", "u4UseRole", "u8AblSndKind",
+                    "u4MenuCategory", "i16MenuSortNo", "u1NoDespel", "i16ScriptArg0", "i16ScriptArg1",
+                    "u8AbilityKind", "u4TargetListKind", "i16AblArgInt0", "u4UpAblKind", "i16AblArgInt1",
+                    "i16AtbCount", "i16AtRnd", "i16KeepVal", "i16IntRsv0", "i16IntRsv1", "u1TgFoge",
+                    "u1NoBackStep", "u1AIWanderFlag", "u16TgElemId", "u10OpProp0", "u1AutoAblStEfEd0",
+                    "u1CheckAutoRpl", "u1SeqParts", "i16AutoAblStEfTi0", "u4YRgCheckType", "u4AtDistKind",
+                    "u4JumpAttackType", "u1SeqTermination", "u5ActSelType", "u4LoopFinCond", "u16LoopFinArg",
+                    "u4RedirectMargeNof0", "i16RefDamSrcRpt", "i16SubRefDamSrcRp", "i8AreaRad",
+                    "u8CamArtsSelType", "u4RedirectMargeNof1", "u4RedirectMargeNof2", "u4RedirectMargeNof3",
+                    "u16SysEffPos0", "u16RtEffPos0", "u16RtEffPos1", "u16RtEffPos2", "u16RtEffPos3",
+                    "u16RtEffPos4"
                 }
             }
         };
