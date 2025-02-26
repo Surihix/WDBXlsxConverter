@@ -62,6 +62,7 @@ namespace WDBXlsxConverter.XIII2LR
                             uint strArrayTypeDataVal;
                             string strArrayTypeDictKey;
                             List<string> strArrayTypeDictList;
+                            string strArrayTypeStringVal;
 
                             while (fieldBitsToProcess != 0 && f < wdbVars.FieldCount)
                             {
@@ -199,8 +200,17 @@ namespace WDBXlsxConverter.XIII2LR
                                             strArrayTypeDictKey = wdbVars.Fields[f];
                                             strArrayTypeDictList = wdbVars.StrArrayDict[strArrayTypeDictKey];
 
-                                            Console.WriteLine($"{strArrayTypeDictKey}: {strArrayTypeDictList[(int)strArrayTypeDataVal]}");
-                                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, strArrayTypeDictList[(int)strArrayTypeDataVal], 2, false);
+                                            if (strArrayTypeDataVal < strArrayTypeDictList.Count)
+                                            {
+                                                strArrayTypeStringVal = strArrayTypeDictList[(int)strArrayTypeDataVal];
+                                            }
+                                            else
+                                            {
+                                                strArrayTypeStringVal = "{null}";
+                                            }
+
+                                            Console.WriteLine($"{strArrayTypeDictKey}: {strArrayTypeStringVal}");
+                                            SharedMethods.WriteToSheet(mainSheet, cellX, cellY, strArrayTypeStringVal, 2, false);
                                             cellY++;
 
                                             if (fieldBitsToProcess != 0)
